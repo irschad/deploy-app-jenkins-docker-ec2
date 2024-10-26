@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage("build image") {
+        stage("build and push image") {
             when {
                 expression {
                     BRANCH_NAME == "master"
@@ -34,6 +34,8 @@ pipeline {
             steps {
                 script {
                     buildImage 'irschad/java-app:3.0'
+                    dockerLogin()
+                    dockerPush 'irschad/java-app:3.0'
                 }
             }
         }
