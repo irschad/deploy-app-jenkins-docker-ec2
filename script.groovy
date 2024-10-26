@@ -1,3 +1,6 @@
+#!/user/bin/env groovy
+@Library('jenkins-shared-library')
+def gv
 def buildJar() {
     echo 'building the application...'
     sh 'mvn package'
