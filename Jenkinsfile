@@ -33,7 +33,7 @@ pipeline {
             }
             steps {
                 script {
-                    buildImage()
+                    buildImage 'irschad/java-app:3.0'
                 }
             }
         }
