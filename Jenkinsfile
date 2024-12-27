@@ -1,56 +1,42 @@
 #! /usr/bin/env groovy
 @Library('jenkins-shared-library')
-def gv
 
 pipeline {   
     agent any
     tools {
         maven 'Maven'
     }
+    environment {
+        IMAGE_NAME = 'irschad/java-app:3.0'
+    }
+    
     stages {
-        stage("init") {
+        stage('build app') {
             steps {
-                script {
-                    gv = load "script.groovy"
-                    echo "Executing pipeline for branch $BRANCH_NAME"
-                }
+                echo 'building application jar...'
+                buildJar()
             }
         }
-        stage("build jar") {
+        stage('build image') {
             steps {
                 script {
-                     buildJar()
-
-                }
-            }
-        }
-
-        stage("build and push image") {
-            when {
-                expression {
-                    BRANCH_NAME == "master"
-                }
-            }
-            steps {
-                script {
-                    buildImage 'irschad/java-app:3.0'
+                    echo 'building the docker image...'
+                    buildImage(env.IMAGE_NAME)
                     dockerLogin()
-                    dockerPush 'irschad/java-app:3.0'
+                    dockerPush(env.IMAGE_NAME)
                 }
             }
-        }
-
+        } 
         stage("deploy") {
-            when {
-                expression {
-                    BRANCH_NAME == "master"
-                }
-            }
             steps {
                 script {
-                    gv.deployApp()
+                    echo 'deploying docker image to EC2...'
+                    def dockerCmd = "docker run -p 8080:8080 -d ${IMAGE_NAME}"
+                    sshagent(['aws-ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@34.229.224.203 ${dockerCmd}"
+                    }
                 }
-            }
-        }               
+            }               
+        }
     }
 } 
