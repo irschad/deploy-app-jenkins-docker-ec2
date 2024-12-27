@@ -79,6 +79,7 @@ The project involves the following steps:
    ```bash
    ssh -i ~/.ssh/ec2-server-key.pem ec2-user@34.229.224.203
    ```
+
 2. Log in to Docker Hub:
    ```bash
    docker login
@@ -97,7 +98,14 @@ The project involves the following steps:
 
 ## Deploy and Access the Web Application
 1. Trigger the Jenkins pipeline to build and deploy the application automatically via webhook.
-2. Access the deployed application in a browser using the URL:
+2. Check whether the container is running on the target instance:
+   ```bash
+   docker ps 
+   CONTAINER ID   IMAGE                  COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+   b91cb1618412   irschad/java-app:4.0   "java -jar java-mave…"   9 seconds ago   Up 8 seconds   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   confident_li
+   ```
+   
+3. Access the deployed application in a browser using the URL:
    ```
    http://34.229.224.203:8080
    ```
