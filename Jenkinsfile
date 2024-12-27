@@ -6,7 +6,7 @@ pipeline {
         maven 'Maven'
     }
     environment {
-        IMAGE_NAME = 'irschad/java-app:5.0'
+        IMAGE_NAME = 'irschad/java-app:6.0'
     }
     
     stages {
