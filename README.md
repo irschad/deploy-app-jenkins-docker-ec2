@@ -5,15 +5,7 @@ This project demonstrates the deployment of a web application to an AWS EC2 inst
 
 ---
 
-## Technologies Used
-- **AWS**
-- **Jenkins**
-- **Docker**
-- **Linux**
-- **Git**
-- **Java**
-- **Maven**
-- **Docker Hub**
+## Technologies: **AWS, Jenkins, Docker, Linux, Git, Java, Maven, Docker Hub**
 
 ---
 
@@ -67,26 +59,25 @@ The project involves the following steps:
 ## Steps to Extend CI Pipeline with Deployment Stage
 
 ### Add Deployment Stage to Jenkinsfile
-1. Edit the `Jenkinsfile` in your project repository to include a deployment stage:
+ Edit the `Jenkinsfile` in the project repository to include a deployment stage:
    ```groovy
    stage('Deploy Application') {
        steps {
            script {
                echo 'Deploying Docker image to EC2 server...'
-               def dockerCmd = 'docker run -d -p 8080:8080 your-dockerhub-repo/app-image:latest'
+               def dockerCmd = 'docker run -d -p 8080:8080 irschad/java-app:4.0'
                sshagent(['ec2-server-key']) {
-                   sh "ssh -o StrictHostKeyChecking=no ec2-user@<EC2-Public-IP> ${dockerCmd}"
+                   sh "ssh -o StrictHostKeyChecking=no ec2-user@34.229.224.203 ${dockerCmd}"
                }
            }
        }
    }
    ```
-2. Replace `<EC2-Public-IP>` with the public IP address of your EC2 instance.
 
-### Log In to Docker Hub on EC2
+### Log In to Docker Hub on EC2 instance
 1. SSH into the EC2 instance:
    ```bash
-   ssh -i ~/.ssh/your-key.pem ec2-user@<EC2-Public-IP>
+   ssh -i ~/.ssh/ec2-server-key.pem ec2-user@34.229.224.203
    ```
 2. Log in to Docker Hub:
    ```bash
@@ -105,21 +96,16 @@ The project involves the following steps:
 ---
 
 ## Deploy and Access the Web Application
-1. Trigger the Jenkins pipeline to build and deploy the application.
+1. Trigger the Jenkins pipeline to build and deploy the application automatically via webhook.
 2. Access the deployed application in a browser using the URL:
    ```
-   http://<EC2-Public-IP>:8080
+   http://34.229.224.203:8080
    ```
+  ![Java Maven App](https://github.com/user-attachments/assets/1d3f4589-7c85-40bc-912b-f78e5adc3a57)
 
-Example:
-```http
-http://34.229.224.203:8080
-```
-
----
 
 ## Notes
-- Ensure the Jenkins server can connect to the EC2 instance via SSH.
+- Ensure the Jenkins server can connect to the target EC2 instance via SSH.
 - Update the security groups responsibly to prevent exposing unnecessary ports.
 
 
