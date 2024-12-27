@@ -61,17 +61,17 @@ The project involves the following steps:
 ### Add Deployment Stage to Jenkinsfile
  Edit the `Jenkinsfile` in the project repository to include a deployment stage:
    ```groovy
-   stage('Deploy Application') {
-       steps {
-           script {
-               echo 'Deploying Docker image to EC2 server...'
-               def dockerCmd = 'docker run -d -p 8080:8080 irschad/java-app:4.0'
-               sshagent(['ec2-server-key']) {
-                   sh "ssh -o StrictHostKeyChecking=no ec2-user@34.229.224.203 ${dockerCmd}"
-               }
-           }
-       }
-   }
+      stage("deploy") {
+            steps {
+                script {
+                    echo 'deploying docker image to EC2...'
+                    def dockerCmd = "docker run -p 8080:8080 -d ${IMAGE_NAME}"
+                    sshagent(['aws-ec2-server-key']) {
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@34.229.224.203 ${dockerCmd}"
+                    }
+                }
+            }               
+        }
    ```
 
 ### Log In to Docker Hub on EC2 instance
