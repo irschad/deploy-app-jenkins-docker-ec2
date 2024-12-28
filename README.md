@@ -97,7 +97,7 @@ The project involves the following steps:
 ---
 
 ## Deploy and Access the Web Application
-1. Trigger the Jenkins pipeline to build and deploy the application automatically via webhook.
+1. Trigger the Jenkins pipeline to build and deploy the application.
 2. Check whether the container is running on the target instance:
    ```bash
    docker ps 
